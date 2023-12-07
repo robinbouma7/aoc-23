@@ -8,8 +8,7 @@
 
 std::ifstream datafile;
 
-std::vector<int64_t> seeds;
-std::vector<int64_t> origseeds;
+std::vector<std::array<int64_t, 2>> seeds;
 
 std::vector<std::array<int, 3>> seed_to_soil;
 std::vector<std::array<int, 3>> soil_to_fertilizer;
@@ -45,17 +44,10 @@ int main() {
                     }
                     else {
                         tempint2 = tempint;
-                        std::cout << "found range: " << tempint1 << " to " << tempint2 << std::endl;
-                        if(tempint1 <= tempint2) {
-                            for(int j = tempint1; j <= tempint2; j++) {
-                                seeds.push_back(j);
-                            }
-                        }
-                        else {
-                            for(int j = tempint2; j <= tempint1; j++) {
-                                seeds.push_back(j);
-                            }
-                        }
+                        std::cout << "found range: " << tempint1 << " to " << tempint1 + tempint2 << std::endl;
+                        
+                        seeds.push_back({tempint1, tempint2});
+                        
                         tempint1 = -1;
                         tempint2 = -1;
                     }
@@ -63,7 +55,6 @@ int main() {
                 }
             }
         }
-        origseeds = seeds;
         int state = -1;
         std::vector<bool> seedchanged;
         while(datafile.good() ) {
@@ -106,14 +97,6 @@ int main() {
                             }
                         }
                     }
-                    std::cout << "found 3 values (" << temparr[2] << ")" << std::endl;
-                    for(int i = 0; i < seeds.size(); i++) {
-                        if(seeds[i] >= temparr[1] && seeds[i] < temparr[1] + temparr[2] && !seedchanged[i]) {
-                            seeds[i] = seeds[i] + temparr[0] - temparr[1];
-                            std::cout << "changed seed " << i << " to " << seeds[i] << std::endl;
-                            seedchanged[i] = true;
-                        }
-                    }
                     seed_to_soil.push_back(temparr);
                 }
                 
@@ -146,14 +129,7 @@ int main() {
                             }
                         }
                     }
-                    std::cout << "found 3 values (" << temparr[2] << ")" << std::endl;
-                    for(int i = 0; i < seeds.size(); i++) {
-                        if(seeds[i] >= temparr[1] && seeds[i] < temparr[1] + temparr[2] && !seedchanged[i]) {
-                            seeds[i] = seeds[i] + temparr[0] - temparr[1];
-                            std::cout << "changed seed " << i << " to " << seeds[i] << std::endl;
-                            seedchanged[i] = true;
-                        }
-                    }
+                    
                     soil_to_fertilizer.push_back(temparr);
                 }
                 
@@ -186,14 +162,7 @@ int main() {
                             }
                         }
                     }
-                    std::cout << "found 3 values (" << temparr[2] << ")" << std::endl;
-                    for(int i = 0; i < seeds.size(); i++) {
-                        if(seeds[i] >= temparr[1] && seeds[i] < temparr[1] + temparr[2] && !seedchanged[i]) {
-                            seeds[i] = seeds[i] + temparr[0] - temparr[1];
-                            std::cout << "changed seed " << i << " to " << seeds[i] << std::endl;
-                            seedchanged[i] = true;
-                        }
-                    }
+                    
                     fertilizer_to_water.push_back(temparr);
                 }
                 
@@ -226,14 +195,7 @@ int main() {
                             }
                         }
                     }
-                    std::cout << "found 3 values (" << temparr[2] << ")" << std::endl;
-                    for(int i = 0; i < seeds.size(); i++) {
-                        if(seeds[i] >= temparr[1] && seeds[i] < temparr[1] + temparr[2] && !seedchanged[i]) {
-                            seeds[i] = seeds[i] + temparr[0] - temparr[1];
-                            std::cout << "changed seed " << i << " to " << seeds[i] << std::endl;
-                            seedchanged[i] = true;
-                        }
-                    }
+                    
                     water_to_light.push_back(temparr);
                 }
                 
@@ -266,14 +228,7 @@ int main() {
                             }
                         }
                     }
-                    std::cout << "found 3 values (" << temparr[2] << ")" << std::endl;
-                    for(int i = 0; i < seeds.size(); i++) {
-                        if(seeds[i] >= temparr[1] && seeds[i] < temparr[1] + temparr[2] && !seedchanged[i]) {
-                            seeds[i] = seeds[i] + temparr[0] - temparr[1];
-                            std::cout << "changed seed " << i << " to " << seeds[i] << std::endl;
-                            seedchanged[i] = true;
-                        }
-                    }
+                   
                     light_to_temperature.push_back(temparr);
                 }
                 
@@ -306,14 +261,7 @@ int main() {
                             }
                         }
                     }
-                    std::cout << "found 3 values (" << temparr[2] << ")" << std::endl;
-                    for(int i = 0; i < seeds.size(); i++) {
-                        if(seeds[i] >= temparr[1] && seeds[i] < temparr[1] + temparr[2] && !seedchanged[i]) {
-                            seeds[i] = seeds[i] + temparr[0] - temparr[1];
-                            std::cout << "changed seed " << i << " to " << seeds[i] << std::endl;
-                            seedchanged[i] = true;
-                        }
-                    }
+                    
                     temparature_to_humidity.push_back(temparr);
                 }
                 
@@ -339,13 +287,6 @@ int main() {
                         }
                     }
                     std::cout << "found 3 values (" << temparr[2] << ")" << std::endl;
-                    for(int i = 0; i < seeds.size(); i++) {
-                        if(seeds[i] >= temparr[1] && seeds[i] < temparr[1] + temparr[2] && !seedchanged[i]) {
-                            seeds[i] = seeds[i] + temparr[0] - temparr[1];
-                            std::cout << "changed seed " << i << " to " << seeds[i] << std::endl;
-                            seedchanged[i] = true;
-                        }
-                    }
                     humidity_to_location.push_back(temparr);
                 }
             }
@@ -355,18 +296,73 @@ int main() {
             }
         }
         std::cout << "done parsing file" << std::endl;
-    
-        std::cout << "locations are: (" << seeds.size() << ")" << std::endl;
-        int64_t smallest = std::numeric_limits<int64_t>::max();
-        for(int i = 0; i < seeds.size(); i++) {
-            std::cout << seeds[i] << std::endl;
-            if(seeds[i] < smallest && seeds[i] > 0) {
-                smallest = seeds[i];
+        int64_t id = 0;
+        int64_t location = 0;
+        int64_t result = 0;
+        bool running = true;
+        while(running) {
+            //back to front
+            result = id;
+            location = id;
+            for(int i = 0; i < humidity_to_location.size(); i++) {
+                if(result >= humidity_to_location[i][0] && result <= humidity_to_location[i][0] + humidity_to_location[i][2]) {
+                    result = result + humidity_to_location[i][1] - humidity_to_location[i][0];
+                    i = humidity_to_location.size();
+                }
             }
+            for(int i = 0; i < temparature_to_humidity.size(); i++) {
+                if(result >= temparature_to_humidity[i][0] && result <= temparature_to_humidity[i][0] + temparature_to_humidity[i][2]) {
+                    result = result + temparature_to_humidity[i][1] - temparature_to_humidity[i][0];
+                    i = temparature_to_humidity.size();
+                }
+            }
+            for(int i = 0; i < light_to_temperature.size(); i++) {
+                if(result >= light_to_temperature[i][0] && result <= light_to_temperature[i][0] + light_to_temperature[i][2]) {
+                    result = result + light_to_temperature[i][1] - light_to_temperature[i][0];
+                    i = light_to_temperature.size();
+                }
+            }
+            for(int i = 0; i < water_to_light.size(); i++) {
+                if(result >= water_to_light[i][0] && result <= water_to_light[i][0] + water_to_light[i][2]) {
+                    result = result + water_to_light[i][1] - water_to_light[i][0];
+                    i = water_to_light.size();
+                }
+            }
+            for(int i = 0; i < fertilizer_to_water.size(); i++) {
+                if(result >= fertilizer_to_water[i][0] && result <= fertilizer_to_water[i][0] + fertilizer_to_water[i][2]) {
+                    result = result + fertilizer_to_water[i][1] - fertilizer_to_water[i][0];
+                    i = fertilizer_to_water.size();
+                }
+            }
+            for(int i = 0; i < soil_to_fertilizer.size(); i++) {
+                if(result >= soil_to_fertilizer[i][0] && result <= soil_to_fertilizer[i][0] + soil_to_fertilizer[i][2]) {
+                    result = result + soil_to_fertilizer[i][1] - soil_to_fertilizer[i][0];
+                    i = soil_to_fertilizer.size();
+                }
+            }
+            for(int i = 0; i < seed_to_soil.size(); i++) {
+                if(result >= seed_to_soil[i][0] && result <= seed_to_soil[i][0] + seed_to_soil[i][2]) {
+                    result = result + seed_to_soil[i][1] - seed_to_soil[i][0];
+                    i = seed_to_soil.size();
+                }
+            }
+            for(int i = 0; i < seeds.size(); i++) {
+                if(result >= seeds[i][0] && result <= seeds[i][0] + seeds[i][1]) {
+                    std::cout << "found result!!!" << std::endl;
+                    running = false;
+                }
+            }
+            id++;
         }
-        std::cout << "smallest is: " << smallest << std::endl;
-        
-
+        std::cout << "result: " << result << std::endl;
+        std::cout << "location: " << location << std::endl;
+        /*
+        if(seeds[i] >= temparr[1] && seeds[i] < temparr[1] + temparr[2] && !seedchanged[i]) {
+            seeds[i] = seeds[i] + temparr[0] - temparr[1];
+            std::cout << "changed seed " << i << " to " << seeds[i] << std::endl;
+            seedchanged[i] = true;
+        }
+        */
     }
     return 0;
 }
