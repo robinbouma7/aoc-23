@@ -238,38 +238,95 @@ int main() {
         
         for(int i = 0; i < map.size(); i++) {
             bool inside = false;
+            bool onroute = false;
+            bool directionup = false;
             for(int j = 0; j < map[i].size(); j++) {
-                if(isloop[i][j] && map[i][j] != '-') {
-                    inside = !inside;
+                if(isloop[i][j] && !onroute) {
+                    if(map[i][j] == '|' || map[i][j] == 'S') {
+                        inside = !inside;
+                    }
+                    else if(map[i][j] == 'L') {
+                        directionup = true;
+                        onroute = true;
+                    }
+                    else if(map[i][j] == 'F') {
+                        directionup = false;
+                        onroute = true;
+                    }
+                    else {
+                        onroute = true;
+                    }
                 }
-                else if(!inside) {
-                   isoutside[i][j] = true;
+                else if(isloop[i][j] ) {
+                    if(map[i][j] == *"7") {
+                        if(directionup) {
+                            inside = !inside;
+                        }
+                        onroute = false;
+                    }
+                    else if(map[i][j] == *"J") {
+                        if(!directionup) {
+                            inside = !inside;
+                        }
+                        onroute = false;
+                    }
                 }
+                isoutside[i][j] = !inside;
+
+                
             }
         }
-        for(int i = 0; i < map[0].size(); i++) {
+        /*for(int i = 0; i < map[0].size(); i++) {
             bool inside = false;
+            bool onroute = false;
+            bool directionleft = false;
             for(int j = 0; j < map.size(); j++) {
-                if(isloop[i][j] && map[i][j] != '|') {
-                    inside = !inside;
+                if(isloop[i][j] && !onroute) {
+                    if(map[i][j] == '-') {
+                        inside = !inside;
+                    }
+                    else if(map[i][j] == 'F') {
+                        directionleft = false;
+                        onroute = true;
+                    }
+                    else if(map[i][j] == '7') {
+                        directionleft = true;
+                        onroute = true;
+                    }
+                    else {
+                        onroute = true;
+                    }
                 }
-                else if(!inside) {
-                   isoutside[i][j] = true;
+                else if(isloop[i][j] ) {
+                    if(map[i][j] == *"L") {
+                        if(directionleft) {
+                            inside = !inside;
+                        }
+                        onroute = false;
+                    }
+                    else if(map[i][j] == *"J") {
+                        if(!directionleft) {
+                            inside = !inside;
+                        }
+                        onroute = false;
+                    }
                 }
+                isoutside[i][j] = !inside;
             }
-        }
-        
+        }*/
         for(int i = 0; i < map.size(); i++) {
             for(int j = 0; j < map[i].size(); j++) {
-                if(isloop[i][j]) {
-                    std::cout << map[i][j];
-                }
-                else if(!isoutside[i][j]) {
-                    std::cout << "X";
-                    result2++;
+                if(isoutside[i][j] || isloop[i][j]) {
+                    if(isloop[i][j]) {
+                        std::cout << ".";
+                    }
+                    else {
+                        std::cout << " ";
+                    }
                 }
                 else {
-                    std::cout << " ";
+                    std::cout << "#";
+                    result2++;
                 }
             }
             std::cout << std::endl;
