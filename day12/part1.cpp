@@ -54,11 +54,8 @@ int main() {
             values.push_back(tempvec2);
         }
         for(int i = 0; i < grid.size(); i++) {
-            for(int j = 0; j < grid[i].size(); j++) {
-                for(int i = 0; i < unknowns[i]; i++) {
-                    
-                }
-            }
+            //do something with springs[i]
+            
         }
 
     }
