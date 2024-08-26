@@ -11,6 +11,7 @@ std::vector<std::vector<int>> combinations;
 std::vector<int> unknowns;
 int result;
 int temptot = 0;
+int tempcount = 0;
 
 bool isvalid(std::string input, std::vector<int> combination)  {
     std::vector<int> tempvec;
@@ -58,11 +59,12 @@ void tryallposibilities(std::string input, std::vector<int> combinations) {
         tempstr[varpos] = (char)*".";
         tryallposibilities(tempstr, combinations);
     }
-    
+    std::cout << tempcount << "\n";
+    tempcount++;
 }
 
 int main() {
-    datafile.open("data.txt");
+    datafile.open("testdata.txt");
 
     if (datafile.is_open()) {
         while(datafile.good() ) {
@@ -89,6 +91,9 @@ int main() {
                 tempstr += line[ident];
                 ident++;
             }
+            for(int i = 0; i < 4; i++) {
+                tempstr = tempstr + "?" + tempstr;
+            }
             grid.push_back(tempvec);
             springs.push_back(tempstr);
             unknowns.push_back(tempint);
@@ -100,7 +105,9 @@ int main() {
                     tempnum = (tempnum * 10) + (line[i] - '0');
                 }
                 else if(tempnum != 0) {
-                    tempvec2.push_back(tempnum);
+                    for(int i = 0; i < 4; i++) {
+                        tempvec2.push_back(tempnum);
+                    }
                     tempnum = 0;
                 }
             }
@@ -109,9 +116,11 @@ int main() {
         std::cout << "done parsing\n";
         for(int i = 0; i < grid.size(); i++) {
             temptot = 0;
+            std::cout << "springlist: " << springs[i] << "\n";
             tryallposibilities(springs[i], combinations[i]);
             std::cout << "possibilities: " << temptot << "\n";
             result += temptot;
+            tempcount = 0;
         }
         std::cout << "result: " << result << "\n";
     }

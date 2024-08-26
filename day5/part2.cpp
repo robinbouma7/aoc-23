@@ -5,6 +5,7 @@
 #include <array>
 #include <map>
 #include <limits>
+#include <stdint.h>
 
 std::ifstream datafile;
 
