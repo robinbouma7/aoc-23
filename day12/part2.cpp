@@ -37,6 +37,8 @@ bool isvalid(std::string input, std::vector<int> combination)  {
             return false;
         }
     }
+    std::cout << tempcount  << "\t" << input << "\n";
+    tempcount++;
     return true;
 }
 void tryallposibilities(std::string input, std::vector<int> combinations) {
@@ -59,8 +61,6 @@ void tryallposibilities(std::string input, std::vector<int> combinations) {
         tempstr[varpos] = (char)*".";
         tryallposibilities(tempstr, combinations);
     }
-    std::cout << tempcount << "\n";
-    tempcount++;
 }
 
 int main() {
