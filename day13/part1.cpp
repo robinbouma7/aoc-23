@@ -5,7 +5,7 @@
 #include <vector>
 
 std::ifstream datafile;
-std::vector<std::vector<std::string>> grids;
+std::vector<std::vector<std::vector<char>>> grids;
 
 //kijken op welke plekken er 2 naast elkaar zijn,
 //alle andere rijen kijken of op dezelfde plakken 2 naast elkaar zijn
@@ -13,6 +13,10 @@ std::vector<std::vector<std::string>> grids;
 
 //dit werkt maar je kan meerdere spiegelpunten hebben
 //hiervoor moet je de 2 rijen er naast ook checken, dit word wel moeilijker 
+
+//volgende manier:
+//draai de vector om zodat je makkelijk 2 vectors kan vergelijken
+//misschien kan dit bij het parsen al gedaan worden
 
 int main(int argc, char *argv[]) {
     if(argc > 1 && (std::strcmp(argv[1], "-t") == 0 || std::strcmp(argv[1], "--test") == 0)) {
@@ -22,16 +26,24 @@ int main(int argc, char *argv[]) {
     else {
         datafile.open("data.txt");
     }
-    
-
+   
     if (datafile.is_open()) {
-        std::vector<std::string> tempvec;
+         
+        std::vector<std::vector<char>> tempvec;
         while(datafile.good() ) {
             std::string line;
             getline(datafile, line);
             if(line.length() > 0) {
-                tempvec.push_back(line);
-                std::cout << line << "\n";
+                if(tempvec.size() == 0) {
+                    for(int i = 0; i < line.length(); i++) {
+                        std::vector<char> temp;
+                        temp.push_back(line[i]);
+                        tempvec.push_back(temp);
+                    }
+                }
+                for(int i = 0; i < line.length(); i++) {
+                    tempvec[i].push_back(line[i]);
+                }
             }
             else {
                 std::cout << "new grid\n";
@@ -44,55 +56,23 @@ int main(int argc, char *argv[]) {
             grids.push_back(tempvec);
         }
     }
-   
     for(int i = 0; i < grids.size(); i++) {
-        std::vector<int> mirrorpoints;
         for(int j = 0; j < grids[i].size(); j++) {
-            char lastchar = grids[i][j][0];
-            std::vector<int> tempmirror;
-            for(int k = 1; k < grids[i][j].length(); k++) {
-                
-                if(lastchar == grids[i][j][k]) {
-                    if(j == 0) {
-                        std::cout << "mirror point found at " << k << "\n";
-                        
-                        mirrorpoints.push_back(k);
-                    }
-                    else {
-                        
-                        bool testval = false;
-                        for(int l = 0; l < mirrorpoints.size(); l++) {
-                            if(mirrorpoints[l] == k) {
-                                tempmirror.push_back(k);
-                                l = mirrorpoints.size();
-                                testval = true;
-                            }
-                        }
-                    }
-                }
-                lastchar = grids[i][j][k];
+            for(int k = 0; k < grids[i][j].size(); k++) {
+                std::cout << grids[i][j][k];
             }
-            
-            if(j > 0) {
-                /*std::cout << "new tempmirror after " << j << ":\n";
-                for(int l = 0; l < tempmirror.size(); l++) {
-                    std::cout << "tempmirror: " << tempmirror[l] << "\n";
-                }
-                std::cout << "\n";*/
-                mirrorpoints = tempmirror;
-            }
-            
-           
+            std::cout << "\n";
         }
-        if(mirrorpoints.size() == 1) {
-            std::cout << "Mirrorpoint found in grid " << i << " at " << mirrorpoints[0] << "\n";
-        }
-        else {
-            std::cout << "multiple or no mirrorpoints found in grid " << i  << " (" << mirrorpoints.size() <<  ")\n";
-            for(int j = 0; j < grids[i].size(); j++) {
-                std::cout << grids[i][j] << "\n";
-            }
-        }
+        std::cout << "\n";
+        //find mirror point in grid
+        //check if there are 2 rows that are the same next to each other
+        //check the 2 next to those
+
+        //eerst hetzelfde als ik in de vorige had gedaan
+        //als er meerdere punten zijn dan moet je al die punten checken met de rijen er naast
+        //als er nog meer 1 over is dan is het gelukt
+        //wel voorzichtig zijn met out of bounds
     }
+    std::cout << "done\n";
     return 0;
 }
